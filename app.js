@@ -1,9 +1,18 @@
+if(process.env.NODE_ENV !="production"){
+  require("dotenv").config();
+}
+console.log(process.env.SECRET);
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
+const ejsMate= require("ejs-mate");
+const multer = require("multer");
+const {storage}=require("./cloudConfig.js");
+const upload = multer({storage})
+
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -23,6 +32,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.engine('ejs',ejsMate);
+app.use(express.static(path.join(__dirname,"/public")))
 
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
@@ -36,6 +47,9 @@ app.get("/listings", async (req, res) => {
 
 //New Route
 app.get("/listings/new", (req, res) => {
+  // let url = req.file.path;
+  // let filename = req.file.filename
+  // newListing.image={url,filename};
   res.render("listings/new.ejs");
 });
 
@@ -47,7 +61,7 @@ app.get("/listings/:id", async (req, res) => {
 });
 
 //Create Route
-app.post("/listings", async (req, res) => {
+app.post("/listings",upload.single('listing[image]'), async (req, res) => {
   const newListing = new Listing(req.body.listing);
   await newListing.save();
   res.redirect("/listings");
