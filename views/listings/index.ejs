@@ -1,5 +1,4 @@
 <% layout("/layouts/boilerplate.ejs") %>
-  <body>
     <h3>All Listings</h3>
     <!-- <form method="GET" action="/listings/new">
       <button>Create New Listing</button>
@@ -11,8 +10,8 @@
           <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing-Image" style="height: 20rem;">
           <div class="card-img-overlay"></div>
           <div class="card-body">
-            <b><p class="card-text"><%= listing.title %></b> <br>
-            <%= listing.price.toLocaleString("en-IN") %>/ Night
+            <p class="card-text"><b><%= listing.title %></b><br/>
+            <%= listing.price %>/ Night
             </p>
           </div>
         </div>
