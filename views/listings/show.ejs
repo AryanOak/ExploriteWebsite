@@ -8,8 +8,9 @@
       <img src="<%= listing.image.url%>" class="card-img-top show-img" alt="listing-Image">
       <div class="card-body">
         <p class="card-text">
+        <i><%= listing.owner %></i>
         <%= listing.description %> <br>
-        <%= listing.price %> <br>
+        <%= listing.price.toLocaleString("en-IN") %> <br>
         <%= listing.location %> <br>
         <%= listing.country %><br>
 
