@@ -7,6 +7,7 @@ const Listing = require("../models/listing.js");
 const multer = require("multer");
 const {storage}=require("../cloudConfig.js");
 const upload = multer({storage})
+const isLoggedIn = require("../middleware.js");
 
 
 
@@ -27,7 +28,7 @@ router.get("/", wrapAsync(async (req, res) => {
   }));
   
   //New Route
-  router.get("/new", (req, res) => {
+  router.get("/new", isLoggedIn ,(req, res) => {
     res.render("listings/new.ejs");
   });
   
@@ -43,7 +44,7 @@ router.get("/", wrapAsync(async (req, res) => {
   }));
   
   //Create Route
-  router.post("/",upload.single('listing[image]'), validateListing,wrapAsync(async (req, res,next) => {
+  router.post("/",upload.single('listing[image]'),isLoggedIn ,validateListing,wrapAsync(async (req, res,next) => {
     let url = req.file.path;
     let filename = req.file.filename
     const newListing = new Listing(req.body.listing);
@@ -55,7 +56,7 @@ router.get("/", wrapAsync(async (req, res) => {
   }));
   
   //Edit Route
-  router.get("/:id/edit", wrapAsync(async (req, res) => {
+  router.get("/:id/edit", isLoggedIn ,wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
     if(!listing){
@@ -66,7 +67,7 @@ router.get("/", wrapAsync(async (req, res) => {
   }));
   
   //Update Route
-  router.put("/:id", upload.single("listing[image]"),validateListing, wrapAsync(async (req, res) => {
+  router.put("/:id", upload.single("listing[image]"),validateListing ,isLoggedIn ,wrapAsync(async (req, res) => {
     let { id } = req.params;
     let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
     if(typeof req.file !== "undefined"){
@@ -81,7 +82,7 @@ router.get("/", wrapAsync(async (req, res) => {
   
   
   //Delete Route
-  router.delete("/:id", wrapAsync(async (req, res) => {
+  router.delete("/:id",isLoggedIn ,wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
