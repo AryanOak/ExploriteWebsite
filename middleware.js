@@ -13,3 +13,12 @@ module.exports.saveRedirectUrl = (req,res,next)=>{
   }
   next();
 }
+
+module.exports.isOwner = async (req,res,next)=>{
+  let { id } = req.params;
+    let Listing = await Listing.findById(id);
+    if(!Listing.owner.equals(res.locals.currUser._id)){
+      req.flash("error","you dont have permission");
+      return res.redirect(`/listings/${id}`);
+    }
+}

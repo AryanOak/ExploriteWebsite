@@ -50,6 +50,7 @@ router.get("/", wrapAsync(async (req, res) => {
     let filename = req.file.filename
     const newListing = new Listing(req.body.listing);
     newListing.image={url,filename};
+    newListing.owner =req.user._id;
     await newListing.save();
     req.flash("success","New Listing Created");
     res.redirect("/listings");
