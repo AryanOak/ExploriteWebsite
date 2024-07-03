@@ -1,4 +1,7 @@
 <% layout("/layouts/boilerplate.ejs") %>
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+</script>
 <div class="row mt-3">
   <div class="col-8 offset-2">
 
@@ -28,8 +31,8 @@
     <%}%>
 
     <div class="col-8 offset-2 mb-3">
-  <hr>
 <% if(currUser){%>
+  <hr>
   <h4>Leave a Review</h4>
   <form action="/listings/<%= listing.id %>/reviews" method="post" novalidate class="needs-validation">
 
@@ -59,8 +62,9 @@
   </form>
   <hr>
   <%}%>
-  <h4>All Reviews</h4>
+  <% if(listing.reviews.length > 0){ %>
   <div class="row">
+  <h4>All Reviews</h4>
   <%for(review of listing.reviews){%>
     <div class="card col-5 ms-3 mb-3">
       <div class="card-body">
@@ -75,6 +79,12 @@
     </div>
     <%}%>
   </div>
+  <%}%>
+</div>
+<div class="col-6 offset-3 mb-3">
+  <h3>Where You will be?</h3>
+  <div id="map"></div>  
 </div>
 </div>
+<script src="/js/map.js"></script>
 <script src="/js/script.js"></script>
