@@ -21,16 +21,16 @@ router.get("/", wrapAsync(listingController.index));
   router.get("/:id", wrapAsync(listingController.showListing));
   
   //Create Route
-  router.post("/",upload.single('listing[image]'),isLoggedIn, isOwner ,validateListing,wrapAsync(listingController.createListing));
+  router.post("/",upload.single('listing[image]'),isLoggedIn,validateListing,wrapAsync(listingController.createListing));
   
   //Edit Route
-  router.get("/:id/edit", isLoggedIn ,isOwner ,wrapAsync(listingController.renderEditForm));
+  router.get("/:id/edit", isLoggedIn,wrapAsync(listingController.renderEditForm));
   
   //Update Route
-  router.put("/:id", upload.single("listing[image]"),isLoggedIn,isOwner, validateListing ,wrapAsync(listingController.updateListing));
+  router.put("/:id", upload.single("listing[image]"),isLoggedIn, validateListing ,wrapAsync(listingController.updateListing));
   
   
   //Delete Route
-  router.delete("/:id",isLoggedIn, isOwner ,wrapAsync(listingController.destroyListing));
+  router.delete("/:id",isLoggedIn,wrapAsync(listingController.destroyListing));
   
   module.exports = router;
